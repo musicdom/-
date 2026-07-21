@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Шашки Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ========== ЭКРАН МЕНЮ ========== -->
+        <div class="screen active" id="menu-screen">
+            <div class="menu-screen">
+                <div class="menu__header">
+                    <div class="menu__title">♛ Шашки</div>
+                    <div class="menu__subtitle">Премиум-классика</div>
+                </div>
+                <div class="menu__buttons" id="menu-buttons">
+                    <button class="btn btn--primary" id="play-btn">
+                        <svg class="btn__icon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Играть
+                    </button>
+                    <button class="btn btn--secondary" id="settings-btn">
+                        <svg class="btn__icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Настройки
+                    </button>
+                </div>
+                <!-- Подменю выбора режима -->
+                <div class="mode-selection" id="mode-selection">
+                    <div class="mode-selection__title">Выберите режим</div>
+                    <button class="btn btn--primary" id="vs-bot-btn">🤖 Против компьютера</button>
+                    <button class="btn btn--secondary" id="vs-friend-btn">👥 Против друга</button>
+                    <button class="btn" id="back-to-menu-btn">← Назад</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ЭКРАН ИГРЫ ========== -->
+        <div class="screen game-screen" id="game-screen">
+            <header class="game-header glass-card">
+                <div class="game-header__left">
+                    <button class="icon-btn" id="back-to-menu-from-game"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+                    <div class="game-header__turn">
+                        <span class="game-header__turn-label">Ход</span>
+                        <span class="game-header__turn-player" id="turn-indicator">Белые</span>
+                    </div>
+                </div>
+                <div class="game-header__score">
+                    <span class="game-header__score-item" id="white-score">12</span>
+                    <span class="game-header__score-divider">:</span>
+                    <span class="game-header__score-item" id="black-score">12</span>
+                </div>
+                <div class="game-header__right">
+                    <button class="icon-btn" id="new-game-btn"><svg viewBox="0 0 24 24"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/></svg></button>
+                    <button class="icon-btn" id="theme-toggle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
+                </div>
+            </header>
+            <main class="game-container">
+                <div class="board-wrapper">
+                    <div class="board" id="board"></div>
+                </div>
+            </main>
+            <footer class="bottom-controls glass-card">
+                <button class="ctrl-btn" id="undo-btn"><svg viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg></button>
+                <button class="ctrl-btn" id="hint-btn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+                <button class="ctrl-btn" id="settings-game-btn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            </footer>
+        </div>
+
+        <!-- ========== ЭКРАН НАСТРОЕК ========== -->
+        <div class="screen settings-screen" id="settings-screen">
+            <header class="settings-header glass-card">
+                <button class="icon-btn" id="back-to-menu-from-settings"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+                <span class="settings-header__title">Настройки</span>
+                <div style="width:40px;"></div>
+            </header>
+            <main class="settings-content">
+                <!-- Демонстрация всех компонентов дизайн-системы -->
+                <section class="settings-section">
+                    <h3 class="settings-section__title">Кнопки</h3>
+                    <div class="settings-row">
+                        <button class="btn btn--primary">Primary</button>
+                        <button class="btn btn--secondary">Secondary</button>
+                        <button class="btn" style="background:var(--gradient-blue);">Gradient</button>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3 class="settings-section__title">Карточки</h3>
+                    <div class="glass-card settings-demo-card">
+                        <div class="settings-demo-card__content">
+                            <span class="badge">Новое</span>
+                            <p class="settings-demo-card__text">Это карточка с текстом и бейджем.</p>
+                            <div class="settings-demo-card__chips">
+                                <span class="chip">Чип</span>
+                                <span class="chip chip--active">Активный</span>
+                                <span class="tag">Тег</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3 class="settings-section__title">Переключатели</h3>
+                    <div class="settings-row">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="switch__slider"></span>
+                        </label>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="switch__slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-row">
+                        <label class="checkbox">
+                            <input type="checkbox" checked>
+                            <span class="checkbox__checkmark"></span>
+                            Чекбокс
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="radio-group" checked>
+                            <span class="radio__circle"></span>
+                            Радио 1
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="radio-group">
+                            <span class="radio__circle"></span>
+                            Радио 2
+                        </label>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3 class="settings-section__title">Поля ввода</h3>
+                    <div class="settings-row">
+                        <div class="input-group">
+                            <input class="input" type="text" placeholder="Имя пользователя">
+                            <label class="input__label">Имя</label>
+                        </div>
+                        <div class="input-group">
+                            <select class="dropdown" id="demo-dropdown">
+                                <option value="1">Опция 1</option>
+                                <option value="2">Опция 2</option>
+                                <option value="3">Опция 3</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3 class="settings-section__title">Загрузка (Skeleton + Shimmer)</h3>
+                    <div class="skeleton-demo" id="skeleton-demo">
+                        <div class="skeleton-card glass-card">
+                            <div class="skeleton-card__avatar"></div>
+                            <div class="skeleton-card__line"></div>
+                            <div class="skeleton-card__line short"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3 class="settings-section__title">Действия</h3>
+                    <div class="settings-row">
+                        <button class="btn btn--primary" id="show-toast-btn">Показать Toast</button>
+                        <button class="btn btn--secondary" id="show-modal-btn">Модалка</button>
+                        <button class="btn btn--secondary" id="show-bottom-sheet-btn">Bottom Sheet</button>
+                    </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3 class="settings-section__title">FAB (плавающая кнопка)</h3>
+                    <div style="position:relative;height:80px;">
+                        <button class="fab" id="fab-demo">
+                            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- ========== МОДАЛЬНОЕ ОКНО ========== -->
+        <div class="modal" id="modal">
+            <div class="modal__overlay" id="modal-overlay"></div>
+            <div class="modal__container glass-card">
+                <div class="modal__header">
+                    <h3 class="modal__title">Заголовок модалки</h3>
+                    <button class="icon-btn" id="modal-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+                <div class="modal__body">
+                    <p>Это пример модального окна с кнопкой закрытия.</p>
+                </div>
+                <div class="modal__footer">
+                    <button class="btn btn--secondary" id="modal-cancel">Отмена</button>
+                    <button class="btn btn--primary" id="modal-confirm">Подтвердить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== BOTTOM SHEET ========== -->
+        <div class="bottom-sheet" id="bottom-sheet">
+            <div class="bottom-sheet__overlay" id="sheet-overlay"></div>
+            <div class="bottom-sheet__container glass-card">
+                <div class="bottom-sheet__handle"></div>
+                <div class="bottom-sheet__content">
+                    <h4 class="bottom-sheet__title">Пример Bottom Sheet</h4>
+                    <p>Этот лист поднимается снизу и может содержать любой контент.</p>
+                    <button class="btn btn--primary btn--full" id="sheet-close">Закрыть</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== TOAST ========== -->
+        <div class="toast" id="toast">
+            <div class="toast__icon">✓</div>
+            <div class="toast__content">
+                <div class="toast__title">Успешно!</div>
+                <div class="toast__subtitle">Действие выполнено</div>
+            </div>
+            <button class="toast__close" id="toast-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
