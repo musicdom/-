@@ -44,6 +44,7 @@
             --font-size-lg: 17px;
             --font-size-xl: 20px;
             --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
             
             --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
             --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -51,7 +52,7 @@
             --duration-normal: 300ms;
             --duration-slow: 500ms;
             
-            --board-size: min(80vw, 80vh);
+            --board-size: min(70vw, 70vh);
             --cell-size: calc(var(--board-size) / 8);
             --piece-size: calc(var(--cell-size) * 0.8);
         }
@@ -101,6 +102,8 @@
             padding: var(--spacing-md);
             background: var(--color-bg-primary);
             transition: background var(--duration-normal) var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
         }
 
         /* ============================================
@@ -116,9 +119,120 @@
         }
 
         /* ============================================
-           Header
+           Screens (Menu / Game)
            ============================================ */
-        .header {
+        .screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            animation: fadeSlideIn 0.4s var(--transition-spring);
+        }
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           Main Menu
+           ============================================ */
+        .menu-screen {
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-xl) 0;
+        }
+
+        .menu__title {
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .menu__subtitle {
+            color: var(--text-secondary);
+            font-size: var(--font-size-md);
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .menu__buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: 16px 32px;
+            border: none;
+            border-radius: var(--radius-element);
+            font-family: var(--font-family);
+            font-size: var(--font-size-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--transition-spring);
+            position: relative;
+            overflow: hidden;
+            background: var(--color-bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--color-border-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--color-bg-glass-hover);
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn--primary {
+            background: var(--gradient-gold);
+            color: #000;
+            border: none;
+            box-shadow: 0 8px 32px rgba(253, 160, 133, 0.3);
+        }
+        .btn--primary:hover {
+            box-shadow: 0 12px 48px rgba(253, 160, 133, 0.4);
+        }
+
+        .btn--secondary {
+            background: transparent;
+            border-color: var(--color-border-glass-hover);
+        }
+
+        .btn__icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        /* ============================================
+           Game Screen
+           ============================================ */
+        .game-screen {
+            padding: 0;
+        }
+
+        .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -127,32 +241,27 @@
             flex-shrink: 0;
         }
 
-        .header__left {
+        .game-header__left {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
         }
 
-        .header__turn-label {
+        .game-header__turn-label {
             font-size: var(--font-size-xs);
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .header__turn-player {
+        .game-header__turn-player {
             font-size: var(--font-size-md);
             font-weight: 700;
             color: var(--text-primary);
             transition: color var(--duration-normal) var(--transition-smooth);
         }
 
-        .header__center {
-            display: flex;
-            align-items: center;
-        }
-
-        .header__score {
+        .game-header__score {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
@@ -160,31 +269,17 @@
             font-weight: 800;
         }
 
-        .header__score-item {
+        .game-header__score-item {
             min-width: 24px;
             text-align: center;
         }
+        .game-header__score-item:first-child { color: #fff; }
+        .game-header__score-item:last-child { color: #aaa; }
+        [data-theme="light"] .game-header__score-item:first-child { color: #1A1A2E; }
+        [data-theme="light"] .game-header__score-item:last-child { color: #555; }
+        .game-header__score-divider { color: var(--text-tertiary); }
 
-        .header__score-item:first-child {
-            color: #fff;
-        }
-
-        .header__score-item:last-child {
-            color: #aaa;
-        }
-
-        [data-theme="light"] .header__score-item:first-child {
-            color: #1A1A2E;
-        }
-        [data-theme="light"] .header__score-item:last-child {
-            color: #555;
-        }
-
-        .header__score-divider {
-            color: var(--text-tertiary);
-        }
-
-        .header__right {
+        .game-header__right {
             display: flex;
             gap: var(--spacing-sm);
         }
@@ -205,7 +300,6 @@
             transition: all var(--duration-fast) var(--transition-smooth);
             border: 1px solid var(--color-border-glass);
         }
-
         .icon-btn:hover {
             background: var(--color-bg-glass-hover);
             transform: scale(1.05);
@@ -222,9 +316,7 @@
             flex-shrink: 0;
         }
 
-        /* ============================================
-           Game Board
-           ============================================ */
+        /* Game Board */
         .game-container {
             flex: 1;
             display: flex;
@@ -262,20 +354,11 @@
             transition: background var(--duration-fast) var(--transition-smooth);
         }
 
-        .cell-dark {
-            background: rgba(30, 35, 50, 0.9);
-        }
-        .cell-light {
-            background: rgba(220, 220, 230, 0.3);
-        }
-        [data-theme="light"] .cell-dark {
-            background: rgba(40, 45, 60, 0.8);
-        }
-        [data-theme="light"] .cell-light {
-            background: rgba(240, 240, 245, 0.5);
-        }
+        .cell-dark { background: rgba(30, 35, 50, 0.9); }
+        .cell-light { background: rgba(220, 220, 230, 0.3); }
+        [data-theme="light"] .cell-dark { background: rgba(40, 45, 60, 0.8); }
+        [data-theme="light"] .cell-light { background: rgba(240, 240, 245, 0.5); }
 
-        /* Подсветка возможного хода */
         .cell.hint::after {
             content: '';
             position: absolute;
@@ -292,13 +375,9 @@
             50% { transform: scale(1.2); opacity: 0.9; }
         }
 
-        .cell.last-move {
-            background: rgba(253, 160, 133, 0.2);
-        }
+        .cell.last-move { background: rgba(253, 160, 133, 0.2); }
 
-        /* ============================================
-           Pieces
-           ============================================ */
+        /* Pieces */
         .piece {
             width: var(--piece-size);
             height: var(--piece-size);
@@ -318,24 +397,17 @@
             background: radial-gradient(circle at 30% 30%, #444, #111);
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .piece-white.piece-king::after {
-            content: '♛';
-            color: #000;
-            font-size: calc(var(--piece-size) * 0.5);
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+        .piece-white.piece-king::after,
         .piece-black.piece-king::after {
             content: '♛';
-            color: #fff;
             font-size: calc(var(--piece-size) * 0.5);
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        .piece-white.piece-king::after { color: #000; }
+        .piece-black.piece-king::after { color: #fff; }
 
         .piece.selected {
             box-shadow: 0 0 0 4px #F6D365, 0 8px 24px rgba(253, 160, 133, 0.5);
@@ -346,15 +418,12 @@
         .piece.captured {
             animation: capture 0.3s var(--transition-smooth) forwards;
         }
-
         @keyframes capture {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* ============================================
-           Bottom Controls
-           ============================================ */
+        /* Bottom Controls */
         .bottom-controls {
             display: flex;
             justify-content: space-around;
@@ -377,59 +446,55 @@
             justify-content: center;
             transition: all var(--duration-fast) var(--transition-spring);
         }
-
         .ctrl-btn:hover {
             color: var(--text-primary);
             background: var(--color-bg-glass);
         }
-        .ctrl-btn:active {
-            transform: scale(0.88);
+        .ctrl-btn:active { transform: scale(0.88); }
+        .ctrl-btn .icon { width: 24px; height: 24px; }
+
+        /* ============================================
+           Mode Selection (sub-menu)
+           ============================================ */
+        .mode-selection {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+        .mode-selection.active {
+            display: flex;
         }
 
-        .ctrl-btn .icon {
-            width: 24px;
-            height: 24px;
+        .mode-selection__title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
         }
 
         /* ============================================
            Responsive
            ============================================ */
         @media (max-width: 430px) {
-            #app {
-                padding: var(--spacing-sm);
-            }
-            .header {
-                padding: var(--spacing-sm) var(--spacing-md);
-            }
-            .header__turn-player {
-                font-size: var(--font-size-sm);
-            }
-            .header__score {
-                font-size: var(--font-size-lg);
-            }
-            .bottom-controls {
-                padding: var(--spacing-sm) var(--spacing-md);
-            }
+            #app { padding: var(--spacing-sm); }
+            .game-header { padding: var(--spacing-sm) var(--spacing-md); }
+            .game-header__turn-player { font-size: var(--font-size-sm); }
+            .game-header__score { font-size: var(--font-size-lg); }
+            .bottom-controls { padding: var(--spacing-sm) var(--spacing-md); }
+            .menu__title { font-size: 28px; }
         }
 
         @media (max-height: 700px) {
-            .header {
-                margin-bottom: var(--spacing-sm);
-            }
-            .bottom-controls {
-                margin-top: var(--spacing-sm);
-                padding: var(--spacing-sm) var(--spacing-md);
-            }
+            .game-header { margin-bottom: var(--spacing-sm); }
+            .bottom-controls { margin-top: var(--spacing-sm); }
         }
 
-        /* ============================================
-           Accessibility
-           ============================================ */
         @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
         }
 
         :focus-visible {
@@ -440,77 +505,116 @@
 </head>
 <body>
     <div id="app">
-        <!-- Верхний хедер -->
-        <header class="header glass-card">
-            <div class="header__left">
-                <div class="header__turn">
-                    <span class="header__turn-label">Ход</span>
-                    <span class="header__turn-player" id="turn-indicator">Белые</span>
+        <!-- ========== ЭКРАН МЕНЮ ========== -->
+        <div class="screen active" id="menu-screen">
+            <div class="menu-screen">
+                <div>
+                    <div class="menu__title">♛ Шашки</div>
+                    <div class="menu__subtitle">Премиум-классика</div>
+                </div>
+                <div class="menu__buttons" id="menu-buttons">
+                    <button class="btn btn--primary" id="play-btn">
+                        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Играть
+                    </button>
+                    <button class="btn btn--secondary" id="settings-btn">
+                        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        Настройки
+                    </button>
+                </div>
+                <!-- Подменю выбора режима -->
+                <div class="mode-selection" id="mode-selection">
+                    <div class="mode-selection__title">Выберите режим</div>
+                    <button class="btn btn--primary" id="vs-bot-btn">🤖 Против компьютера</button>
+                    <button class="btn btn--secondary" id="vs-friend-btn">👥 Против друга</button>
+                    <button class="btn" id="back-to-menu-btn" style="margin-top: var(--spacing-sm);">← Назад</button>
                 </div>
             </div>
-            <div class="header__center">
-                <div class="header__score">
-                    <span class="header__score-item" id="white-score">12</span>
-                    <span class="header__score-divider">:</span>
-                    <span class="header__score-item" id="black-score">12</span>
+        </div>
+
+        <!-- ========== ЭКРАН ИГРЫ ========== -->
+        <div class="screen game-screen" id="game-screen">
+            <!-- Верхний хедер -->
+            <header class="game-header glass-card">
+                <div class="game-header__left">
+                    <button class="icon-btn" id="back-to-menu-from-game" aria-label="Назад в меню">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="game-header__turn">
+                        <span class="game-header__turn-label">Ход</span>
+                        <span class="game-header__turn-player" id="turn-indicator">Белые</span>
+                    </div>
                 </div>
-            </div>
-            <div class="header__right">
-                <button class="icon-btn" id="new-game-btn" aria-label="Новая игра">
+                <div class="game-header__score">
+                    <span class="game-header__score-item" id="white-score">12</span>
+                    <span class="game-header__score-divider">:</span>
+                    <span class="game-header__score-item" id="black-score">12</span>
+                </div>
+                <div class="game-header__right">
+                    <button class="icon-btn" id="new-game-btn" aria-label="Новая игра">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polygon points="18 2 22 6 12 16 8 16 8 12 18 2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Переключить тему">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Игровое поле -->
+            <main class="game-container">
+                <div class="board-wrapper">
+                    <div class="board" id="board"></div>
+                </div>
+            </main>
+
+            <!-- Нижняя панель -->
+            <footer class="bottom-controls glass-card">
+                <button class="ctrl-btn" id="undo-btn" aria-label="Отменить ход">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34" stroke-linecap="round" stroke-linejoin="round"/>
-                        <polygon points="18 2 22 6 12 16 8 16 8 12 18 2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 7v6h6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
-                <button class="icon-btn" id="theme-toggle" aria-label="Переключить тему">
+                <button class="ctrl-btn" id="hint-btn" aria-label="Подсказка">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="12" y1="1" x2="12" y2="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="12" y1="21" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="1" y1="12" x2="3" y2="12" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="21" y1="12" x2="23" y2="12" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-linecap="round" stroke-linejoin="round"/>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
                     </svg>
                 </button>
-            </div>
-        </header>
-
-        <!-- Основное игровое поле -->
-        <main class="game-container">
-            <div class="board-wrapper">
-                <div class="board" id="board"></div>
-            </div>
-        </main>
-
-        <!-- Нижняя панель управления -->
-        <footer class="bottom-controls glass-card">
-            <button class="ctrl-btn" id="undo-btn" aria-label="Отменить ход">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M3 7v6h6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-            <button class="ctrl-btn" id="hint-btn" aria-label="Подсказка">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-            <button class="ctrl-btn" id="settings-btn" aria-label="Настройки">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </footer>
+                <button class="ctrl-btn" id="settings-game-btn" aria-label="Настройки">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </footer>
+        </div>
     </div>
+
     <script>
         // ============================================
-        // Шашки Premium - Полная игровая логика
+        // Шашки Premium - Полная логика с меню и ИИ
         // ============================================
 
         (() => {
@@ -521,9 +625,11 @@
             const EMPTY = 0;
             const WHITE = 1;
             const BLACK = 2;
-            const KING = 4; // битовая маска
+            const KING = 4;
 
-            // --- DOM ---
+            // --- DOM-элементы ---
+            const menuScreen = document.getElementById('menu-screen');
+            const gameScreen = document.getElementById('game-screen');
             const boardEl = document.getElementById('board');
             const turnIndicator = document.getElementById('turn-indicator');
             const whiteScoreEl = document.getElementById('white-score');
@@ -532,16 +638,38 @@
             const themeToggle = document.getElementById('theme-toggle');
             const undoBtn = document.getElementById('undo-btn');
             const hintBtn = document.getElementById('hint-btn');
+            const backToMenuBtn = document.getElementById('back-to-menu-from-game');
+            const playBtn = document.getElementById('play-btn');
+            const settingsBtn = document.getElementById('settings-btn');
+            const vsBotBtn = document.getElementById('vs-bot-btn');
+            const vsFriendBtn = document.getElementById('vs-friend-btn');
+            const backToMenuFromMode = document.getElementById('back-to-menu-btn');
+            const modeSelection = document.getElementById('mode-selection');
+            const menuButtons = document.getElementById('menu-buttons');
 
-            // --- Состояние ---
+            // --- Состояние игры ---
             let board = [];
             let currentPlayer = WHITE;
-            let selectedCell = null; // { row, col }
+            let selectedCell = null;
             let validMoves = [];
             let moveHistory = [];
             let gameOver = false;
+            let isBotGame = false;      // true если игра против бота
+            let botThinking = false;    // блокировка ходов во время хода бота
 
-            // --- Инициализация ---
+            // --- Переключение экранов ---
+            function showScreen(screenId) {
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                document.getElementById(screenId).classList.add('active');
+            }
+
+            // --- Показать/скрыть подменю выбора режима ---
+            function showModeSelection(show) {
+                modeSelection.classList.toggle('active', show);
+                menuButtons.style.display = show ? 'none' : 'flex';
+            }
+
+            // --- Инициализация доски ---
             function initBoard() {
                 board = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(EMPTY));
                 for (let r = 0; r < BOARD_SIZE; r++) {
@@ -557,23 +685,15 @@
                 validMoves = [];
                 moveHistory = [];
                 gameOver = false;
+                botThinking = false;
                 updateUI();
             }
 
-            // --- Проверка, является ли фигура дамкой ---
-            function isKing(piece) {
-                return (piece & KING) !== 0;
-            }
+            // --- Вспомогательные функции ---
+            function isKing(piece) { return (piece & KING) !== 0; }
+            function getColor(piece) { return piece & 3; }
+            function makeKing(piece) { return piece | KING; }
 
-            function getColor(piece) {
-                return piece & 3;
-            }
-
-            function makeKing(piece) {
-                return piece | KING;
-            }
-
-            // --- Получение всех фигур текущего игрока ---
             function getPlayerPieces(player) {
                 const pieces = [];
                 for (let r = 0; r < BOARD_SIZE; r++) {
@@ -586,19 +706,15 @@
                 return pieces;
             }
 
-            // --- Проверка, есть ли обязательные взятия для игрока ---
             function hasMandatoryCapture(player) {
                 const pieces = getPlayerPieces(player);
                 for (let p of pieces) {
                     const moves = getValidMovesForPiece(p.row, p.col, true);
-                    if (moves.length > 0 && moves.some(m => m.captured !== null)) {
-                        return true;
-                    }
+                    if (moves.length > 0 && moves.some(m => m.captured !== null)) return true;
                 }
                 return false;
             }
 
-            // --- Получение допустимых ходов для фигуры (опционально только взятия) ---
             function getValidMovesForPiece(row, col, onlyCapture = false) {
                 const piece = board[row][col];
                 if (piece === EMPTY) return [];
@@ -609,7 +725,7 @@
                 if (color === BLACK || king) directions.push(1);
                 const moves = [];
 
-                // Проверяем взятия (прыжки)
+                // Взятия
                 for (let dRow of directions) {
                     for (let dCol of [-1, 1]) {
                         const newRow = row + dRow;
@@ -625,7 +741,6 @@
                         }
                     }
                 }
-
                 if (moves.length > 0) return moves;
                 if (onlyCapture) return [];
 
@@ -643,7 +758,6 @@
                 return moves;
             }
 
-            // --- Получение всех допустимых ходов для игрока ---
             function getAllValidMoves(player) {
                 const pieces = getPlayerPieces(player);
                 let allMoves = [];
@@ -655,13 +769,11 @@
                         allMoves.push({ fromRow: p.row, fromCol: p.col, ...m });
                     }
                 }
-                if (hasCapture) {
-                    allMoves = allMoves.filter(m => m.captured !== null);
-                }
+                if (hasCapture) allMoves = allMoves.filter(m => m.captured !== null);
                 return allMoves;
             }
 
-            // --- Выполнение хода ---
+            // --- Выполнение хода (возвращает { chain, row, col } или false, если ход невозможен) ---
             function makeMove(fromRow, fromCol, toRow, toCol, captured) {
                 const piece = board[fromRow][fromCol];
                 moveHistory.push({
@@ -680,6 +792,7 @@
                     updateScore();
                 }
 
+                // Превращение в дамку
                 if (getColor(piece) === WHITE && toRow === 0) {
                     board[toRow][toCol] = makeKing(piece);
                 } else if (getColor(piece) === BLACK && toRow === BOARD_SIZE - 1) {
@@ -692,12 +805,12 @@
                     return { chain: true, row: toRow, col: toCol };
                 }
 
+                // Переключение игрока
                 currentPlayer = (currentPlayer === WHITE) ? BLACK : WHITE;
                 checkGameOver();
                 return { chain: false };
             }
 
-            // --- Проверка окончания игры ---
             function checkGameOver() {
                 const moves = getAllValidMoves(currentPlayer);
                 if (moves.length === 0) {
@@ -705,11 +818,12 @@
                     const winner = (currentPlayer === WHITE) ? 'Чёрные' : 'Белые';
                     setTimeout(() => {
                         alert(`🏆 Победили ${winner}!`);
-                    }, 100);
+                        // Возврат в меню
+                        showScreen('menu-screen');
+                    }, 300);
                 }
             }
 
-            // --- Обновление счёта ---
             function updateScore() {
                 let white = 0, black = 0;
                 for (let r = 0; r < BOARD_SIZE; r++) {
@@ -725,13 +839,27 @@
                 blackScoreEl.textContent = black;
             }
 
-            // --- Обновление UI ---
-            function updateUI() {
-                renderBoard();
-                turnIndicator.textContent = currentPlayer === WHITE ? 'Белые' : 'Чёрные';
-                turnIndicator.style.color = currentPlayer === WHITE ? '#fff' : '#aaa';
-                updateScore();
-                clearHighlights();
+            // --- Отрисовка ---
+            function renderBoard() {
+                boardEl.innerHTML = '';
+                for (let r = 0; r < BOARD_SIZE; r++) {
+                    for (let c = 0; c < BOARD_SIZE; c++) {
+                        const cell = document.createElement('div');
+                        cell.className = `cell ${(r + c) % 2 === 0 ? 'cell-light' : 'cell-dark'}`;
+                        cell.dataset.row = r;
+                        cell.dataset.col = c;
+                        const piece = board[r][c];
+                        if (piece !== EMPTY) {
+                            const pieceEl = document.createElement('div');
+                            const color = getColor(piece);
+                            pieceEl.className = `piece ${color === WHITE ? 'piece-white' : 'piece-black'}`;
+                            if (isKing(piece)) pieceEl.classList.add('piece-king');
+                            cell.appendChild(pieceEl);
+                        }
+                        boardEl.appendChild(cell);
+                    }
+                }
+                // Восстановление выделения и подсказок
                 if (selectedCell) {
                     const idx = selectedCell.row * BOARD_SIZE + selectedCell.col;
                     const cellEl = boardEl.children[idx];
@@ -753,26 +881,12 @@
                 document.querySelectorAll('.cell.last-move').forEach(el => el.classList.remove('last-move'));
             }
 
-            // --- Отрисовка доски ---
-            function renderBoard() {
-                boardEl.innerHTML = '';
-                for (let r = 0; r < BOARD_SIZE; r++) {
-                    for (let c = 0; c < BOARD_SIZE; c++) {
-                        const cell = document.createElement('div');
-                        cell.className = `cell ${(r + c) % 2 === 0 ? 'cell-light' : 'cell-dark'}`;
-                        cell.dataset.row = r;
-                        cell.dataset.col = c;
-                        const piece = board[r][c];
-                        if (piece !== EMPTY) {
-                            const pieceEl = document.createElement('div');
-                            const color = getColor(piece);
-                            pieceEl.className = `piece ${color === WHITE ? 'piece-white' : 'piece-black'}`;
-                            if (isKing(piece)) pieceEl.classList.add('piece-king');
-                            cell.appendChild(pieceEl);
-                        }
-                        boardEl.appendChild(cell);
-                    }
-                }
+            function updateUI() {
+                renderBoard();
+                turnIndicator.textContent = currentPlayer === WHITE ? 'Белые' : 'Чёрные';
+                turnIndicator.style.color = currentPlayer === WHITE ? '#fff' : '#aaa';
+                updateScore();
+                clearHighlights();
                 if (selectedCell) {
                     const idx = selectedCell.row * BOARD_SIZE + selectedCell.col;
                     const cellEl = boardEl.children[idx];
@@ -790,11 +904,10 @@
 
             // --- Обработка клика по клетке ---
             function handleCellClick(e) {
+                if (gameOver || botThinking) return;
                 const cell = e.currentTarget;
                 const row = parseInt(cell.dataset.row);
                 const col = parseInt(cell.dataset.col);
-                if (gameOver) return;
-
                 const piece = board[row][col];
 
                 if (piece === EMPTY) {
@@ -809,6 +922,13 @@
                                 selectedCell = { row: result.row, col: result.col };
                                 validMoves = getValidMovesForPiece(result.row, result.col, true);
                                 updateUI();
+                                // Если цепочка и это игра против бота, и ход бота – не даём боту ходить
+                                // но обычно цепочка продолжается тем же игроком, поэтому не переключаем
+                            } else {
+                                // После завершения хода проверяем, не бот ли ходит
+                                if (isBotGame && currentPlayer === BLACK && !gameOver) {
+                                    scheduleBotMove();
+                                }
                             }
                             return;
                         }
@@ -839,19 +959,75 @@
                 }
             }
 
+            // --- Бот (случайный ход с приоритетом взятий) ---
+            function getBotMove() {
+                const moves = getAllValidMoves(BLACK);
+                if (moves.length === 0) return null;
+                // Сортируем так, чтобы ходы со взятием были в приоритете
+                moves.sort((a, b) => {
+                    if (a.captured && !b.captured) return -1;
+                    if (!a.captured && b.captured) return 1;
+                    return 0;
+                });
+                // Выбираем случайный среди лучших (с взятием или без)
+                const bestMoves = moves.filter(m => (m.captured !== null) === (moves[0].captured !== null));
+                return bestMoves[Math.floor(Math.random() * bestMoves.length)];
+            }
+
+            function scheduleBotMove() {
+                if (!isBotGame || currentPlayer !== BLACK || gameOver) return;
+                botThinking = true;
+                setTimeout(() => {
+                    if (gameOver) { botThinking = false; return; }
+                    const move = getBotMove();
+                    if (!move) {
+                        botThinking = false;
+                        checkGameOver();
+                        return;
+                    }
+                    // Выполняем ход бота
+                    const result = makeMove(move.fromRow, move.fromCol, move.row, move.col, move.captured);
+                    selectedCell = null;
+                    validMoves = [];
+                    updateUI();
+                    if (result.chain) {
+                        // Бот продолжает цепочку
+                        selectedCell = { row: result.row, col: result.col };
+                        validMoves = getValidMovesForPiece(result.row, result.col, true);
+                        updateUI();
+                        // Запланируем следующий ход бота (продолжение)
+                        setTimeout(() => {
+                            botThinking = false;
+                            scheduleBotMove();
+                        }, 300);
+                    } else {
+                        botThinking = false;
+                        // Если игра не закончена, и ход снова перешёл к боту (не должно быть, т.к. мы переключаем)
+                        // но на всякий случай
+                        if (!gameOver && isBotGame && currentPlayer === BLACK) {
+                            scheduleBotMove();
+                        }
+                    }
+                }, 400);
+            }
+
             // --- Новая игра ---
-            function newGame() {
+            function startNewGame(vsBot) {
+                isBotGame = vsBot;
                 initBoard();
                 selectedCell = null;
                 validMoves = [];
                 gameOver = false;
+                botThinking = false;
+                showScreen('game-screen');
                 updateUI();
-                clearHighlights();
+                // Если бот ходит первым? В шашках белые ходят первыми, поэтому бот (чёрные) ходит после.
+                // Ничего не делаем, ждём хода игрока.
             }
 
             // --- Отмена хода ---
             function undoMove() {
-                if (moveHistory.length === 0) return;
+                if (moveHistory.length === 0 || botThinking) return;
                 const last = moveHistory.pop();
                 board[last.fromRow][last.fromCol] = last.piece;
                 board[last.toRow][last.toCol] = EMPTY;
@@ -866,10 +1042,12 @@
                 validMoves = [];
                 gameOver = false;
                 updateUI();
+                // Если это игра против бота и ход бота, отмена не должна запускать бота.
             }
 
             // --- Подсказка ---
             function showHint() {
+                if (gameOver || botThinking) return;
                 const moves = getAllValidMoves(currentPlayer);
                 if (moves.length === 0) return;
                 const first = moves[0];
@@ -888,28 +1066,66 @@
                 html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
             }
 
-            // --- Инициализация событий ---
+            // --- Обработчики навигации ---
+            function goToMenu() {
+                showScreen('menu-screen');
+                // Если игра была против бота и бот думает, сбросим
+                botThinking = false;
+            }
+
+            // --- Инициализация ---
             function init() {
-                initBoard();
+                // Меню
+                playBtn.addEventListener('click', () => {
+                    showModeSelection(true);
+                });
+                backToMenuFromMode.addEventListener('click', () => {
+                    showModeSelection(false);
+                });
+                vsBotBtn.addEventListener('click', () => {
+                    showModeSelection(false);
+                    startNewGame(true);
+                });
+                vsFriendBtn.addEventListener('click', () => {
+                    showModeSelection(false);
+                    startNewGame(false);
+                });
+                settingsBtn.addEventListener('click', () => {
+                    toggleTheme();
+                });
+
+                // Игра
+                backToMenuBtn.addEventListener('click', goToMenu);
+                newGameBtn.addEventListener('click', () => {
+                    // Перезапуск с текущим режимом
+                    startNewGame(isBotGame);
+                });
+                themeToggle.addEventListener('click', toggleTheme);
+                undoBtn.addEventListener('click', undoMove);
+                hintBtn.addEventListener('click', showHint);
+                // Кнопка настроек в игре (дублируем переключение темы)
+                document.getElementById('settings-game-btn').addEventListener('click', toggleTheme);
+
+                // Клик по доске
                 boardEl.addEventListener('click', (e) => {
                     const cell = e.target.closest('.cell');
                     if (cell) handleCellClick({ currentTarget: cell });
                 });
 
-                newGameBtn.addEventListener('click', newGame);
-                themeToggle.addEventListener('click', toggleTheme);
-                undoBtn.addEventListener('click', undoMove);
-                hintBtn.addEventListener('click', showHint);
+                // Инициализируем доску (покажет стартовую позицию, но экран скрыт)
+                initBoard();
+                // Показываем меню
+                showScreen('menu-screen');
+                showModeSelection(false);
 
-                window.addEventListener('resize', () => {
+                // Адаптация размера доски
+                function updateBoardSize() {
                     const root = document.documentElement;
                     const size = Math.min(window.innerWidth * 0.85, window.innerHeight * 0.65, 500);
                     root.style.setProperty('--board-size', size + 'px');
-                });
-                setTimeout(() => {
-                    const size = Math.min(window.innerWidth * 0.85, window.innerHeight * 0.65, 500);
-                    document.documentElement.style.setProperty('--board-size', size + 'px');
-                }, 50);
+                }
+                window.addEventListener('resize', updateBoardSize);
+                setTimeout(updateBoardSize, 50);
             }
 
             if (document.readyState === 'loading') {
